@@ -31,4 +31,23 @@ export default class UserEntityRepository implements ICreateUserEntityGateway {
     );
     return userSaved;
   }
+
+  async update(existingEntity: UserEntity): Promise<UserEntity> {
+    const existingUser: IUserModel = new UserModel(existingEntity);
+    await existingUser.save((err, user) => {
+      if (err || !user) {
+        throw new Error('UserEntityRepository.save.err');
+      }
+    });
+    const userSaved = new UserEntity(
+      existingUser.email,
+      existingUser.password,
+      existingUser._id,
+      existingUser.firstname,
+      existingUser.lastname,
+      existingUser.phone,
+      existingUser.address
+    );
+    return userSaved;
+  }
 }
